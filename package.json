@@ -1,17 +1,34 @@
 {
   "name": "claude-api-typescript",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "description": "Building with the Claude API in TypeScript: prompts, evals, tool use, RAG and MCP",
+  "private": true,
   "type": "module",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "basics:chat": "tsx src/01-basics/chat.ts",
+    "basics:structured": "tsx src/01-basics/structured-output.ts",
+    "evals:generate": "tsx src/02-evals/gen-dataset.ts",
+    "evals:run": "tsx src/02-evals/run-eval.ts",
+    "evals:grade": "tsx src/02-evals/grade-eval.ts",
+    "tools:test": "tsx src/03-tool-use/test-tools.ts",
+    "tools:schema": "tsx src/03-tool-use/test-schema.ts",
+    "tools:intro": "tsx src/03-tool-use/tool-intro.ts",
+    "tools:search": "tsx src/03-tool-use/web-search.ts",
+    "rag:chunking": "tsx src/04-rag/chunking-demo.ts",
+    "rag:check": "tsx src/04-rag/check-similarity.ts",
+    "rag:embed": "tsx src/04-rag/test-embeddings.ts",
+    "rag:run": "tsx src/04-rag/rag.ts",
+    "mcp:test": "tsx src/05-mcp/test-server.ts",
+    "mcp:test-resources": "tsx src/05-mcp/test-resources.ts",
+    "mcp:chat": "tsx src/05-mcp/mcp-chat.ts"
+  },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.134.0",
+    "@modelcontextprotocol/sdk": "^1.32.1",
     "dotenv": "^18.0.8",
     "zod": "^4.6.7"
   },

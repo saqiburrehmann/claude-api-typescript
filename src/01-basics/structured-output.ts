@@ -1,9 +1,6 @@
-import "dotenv/config";
-import Anthropic from "@anthropic-ai/sdk";
-import { z } from "zod";
 import { zodOutputFormat } from "@anthropic-ai/sdk/helpers/zod";
-
-const client = new Anthropic();
+import { z } from "zod";
+import { anthropic, MODEL } from "../shared/config.js";
 
 const LeadSchema = z.object({
   name: z.string(),
@@ -13,9 +10,9 @@ const LeadSchema = z.object({
   urgent: z.boolean(),
 });
 
-async function main() {
-  const response = await client.messages.parse({
-    model: "claude-haiku-5-5",
+async function main(): Promise<void> {
+  const response = await anthropic.messages.parse({
+    model: MODEL,
     max_tokens: 1000,
     messages: [
       {
@@ -24,9 +21,7 @@ async function main() {
           "Extract the lead: Hi, I'm Sara Khan (sara@shop.pk). I need a Shopify store and SEO, budget around $800. Need it live before Eid!",
       },
     ],
-    output_config: {
-      format: zodOutputFormat(LeadSchema),
-    },
+    output_config: { format: zodOutputFormat(LeadSchema) },
   });
 
   const lead = response.parsed_output;
@@ -36,8 +31,9 @@ async function main() {
   }
 
   console.log(lead);
-  console.log("Name:", lead.name, "| Budget:", lead.budget);
-  console.log("Tokens:", response.usage.input_tokens, "in,", response.usage.output_tokens, "out");
+  console.log(
+    `Tokens: ${response.usage.input_tokens} in, ${response.usage.output_tokens} out`
+  );
 }
 
 main().catch(console.error);

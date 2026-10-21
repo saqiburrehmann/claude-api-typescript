@@ -1,10 +1,8 @@
-import "dotenv/config";
 import { writeFileSync } from "node:fs";
-import Anthropic from "@anthropic-ai/sdk";
-import { z } from "zod";
 import { zodOutputFormat } from "@anthropic-ai/sdk/helpers/zod";
-
-const client = new Anthropic();
+import { z } from "zod";
+import { anthropic, MODEL } from "../shared/config.js";
+import { outputPath } from "../shared/paths.js";
 
 const DatasetSchema = z.object({
   cases: z.array(
@@ -15,9 +13,9 @@ const DatasetSchema = z.object({
   ),
 });
 
-async function main() {
-  const response = await client.messages.parse({
-    model: "claude-haiku-5-5",
+async function main(): Promise<void> {
+  const response = await anthropic.messages.parse({
+    model: MODEL,
     max_tokens: 1000,
     messages: [
       {
@@ -36,10 +34,10 @@ Include 2 "easy" (common goals), 2 "hard" (goals with constraints like allergies
     return;
   }
 
-  writeFileSync("dataset.json", JSON.stringify(data.cases, null, 2));
+  const file = outputPath("dataset.json");
+  writeFileSync(file, JSON.stringify(data.cases, null, 2));
   console.log(data.cases);
-  console.log("Saved", data.cases.length, "cases to dataset.json");
-  console.log("Tokens:", response.usage.input_tokens, "in,", response.usage.output_tokens, "out");
+  console.log(`Saved ${data.cases.length} cases to ${file}`);
 }
 
 main().catch(console.error);
